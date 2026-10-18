@@ -1,6 +1,7 @@
 // 児童向けの画面（拡張ディスプレイに出す別のウィンドウ）。先生が確認した内容だけを表示する。
 import { Channel, type DisplayOptions, type DisplayPayload, type Message } from "../channel/channel";
 import { markedToHtml, stripRuby } from "../text/ruby";
+import { logoSvg, waitingSvg } from "../ui/art";
 import { esc } from "../ui/dom";
 
 export function mountStudent(root: HTMLElement) {
@@ -12,7 +13,7 @@ export function mountStudent(root: HTMLElement) {
   root.innerHTML = `
     <div class="st-wrap">
       <div class="st-top">
-        <span>きょうしつの がめん（デモ）</span>
+        <span class="st-brand">${logoSvg} きょうしつの がめん（デモ）</span>
         <span>
           <button type="button" id="fs">全画面にする</button>
         </span>
@@ -28,7 +29,7 @@ export function mountStudent(root: HTMLElement) {
   const render = () => {
     document.body.style.setProperty("--s", String(options?.scale ?? 1));
     if (!payload || !options) {
-      content.innerHTML = `<div class="st-idle"><div>せんせいの かくにんを まっています<br><small style="font-size:.5em">先生が確認した指示だけが、ここに表示されます</small></div></div>`;
+      content.innerHTML = `<div class="st-idle"><div>${waitingSvg}<div>せんせいの かくにんを まっています</div><small>先生が確認した指示だけが、ここに表示されます</small></div></div>`;
       return;
     }
     const o = options;
@@ -52,7 +53,7 @@ export function mountStudent(root: HTMLElement) {
     }
     if (o.cards && payload.cards.length > 0) {
       parts.push(`<section>
-        <p class="st-cards-title">きょうの ことば（ようご カード）</p>
+        <p class="st-cards-title">📘 きょうの ことば（ようご カード）</p>
         <div class="st-cards">${payload.cards
           .map(
             (c) => `<div class="st-card">

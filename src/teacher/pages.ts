@@ -12,7 +12,7 @@ export function renderGlossaryPage(el: HTMLElement) {
   const langs = state.session.langs;
   const draw = () => {
     el.innerHTML = `<div class="page">
-      <h1>教科の用語集</h1>
+      <div class="page-hero"><span class="big-ico" aria-hidden="true">📘</span><div><h1>教科の用語集</h1><p>教科のことばを、ふりがな・やさしい説明・母語の訳と一緒に覚える</p></div></div>
       <p class="lead">母語を足場にしながら、教科の用語を日本語で覚えていく、教科学習支援の第一歩です。
       ここに登録した用語は、①やさしい日本語で消えたら警告し、②翻訳では学校で決めた訳にそろえ、③児童向けの画面の「用語カード」に、ふりがな、やさしい説明、母語の訳と一緒に表示します。</p>
       <div class="row" style="margin:12px 0">
@@ -80,7 +80,7 @@ export function renderPhrasesPage(el: HTMLElement) {
   const draw = () => {
     const phrases = loadPhrases();
     el.innerHTML = `<div class="page">
-      <h1>定型文</h1>
+      <div class="page-hero"><span class="big-ico" aria-hidden="true">⭐</span><div><h1>定型文</h1><p>よく使う指示を、確認済みのまま呼び出す</p></div></div>
       <p class="lead">よく使う指示を、確認済みの内容（原文、やさしい日本語、2言語、用語カード）のまま保存し、授業の画面の「定型文」から呼び出して、すぐに表示できます。保存はこのブラウザの中だけです。</p>
       ${
         phrases.length === 0
@@ -113,7 +113,7 @@ export function renderResultsPage(el: HTMLElement) {
     <div class="stat"><div class="sub">${title}</div><div class="big">${pct(a, b)}</div><div class="sub">${a} / ${b}件　${sub}</div>
     <div class="bar ${red ? "red" : ""}"><div style="width:${b ? (a / b) * 100 : 0}%"></div></div></div>`;
   el.innerHTML = `<div class="page">
-    <h1>検証結果</h1>
+    <div class="page-hero"><span class="big-ico" aria-hidden="true">📊</span><div><h1>検証結果</h1><p>意味の取りこぼしを、どれだけ見つけられるか</p></div></div>
     <p class="lead">意味の取りこぼしの照合を、見本20件（正しい変換1つと、AIがよく起こす間違いの例2つ）と、テスト用の追加データ${m.results.filter((r) => r.source === "追加データ").length}件で確かめた結果です。
     この数字は、自動テストと同じデータから、このページを開いたときに計算しています。</p>
     <div class="stats">
@@ -151,7 +151,7 @@ export function renderResultsPage(el: HTMLElement) {
 // ------------------------------------------------------------------ 本番での差し替えの考え方
 export function renderPartsPage(el: HTMLElement) {
   el.innerHTML = `<div class="page">
-    <h1>本番での差し替えの考え方</h1>
+    <div class="page-hero"><span class="big-ico" aria-hidden="true">🔧</span><div><h1>本番での差し替えの考え方</h1><p>音声認識・やさしい日本語化・翻訳を、あとから選べる作り</p></div></div>
     <p class="lead">音声認識、やさしい日本語化、翻訳の3つは、コードの中で<b>同じ形の差し込み口</b>として分けています（src/adapters）。本番では、画面と照合の仕組みは変えずに、差し込み口の中身だけを外部のサービスにつなぎ替えます。</p>
     <table class="data">
       <thead><tr><th style="width:14%">部品</th><th style="width:28%">このデモでの中身</th><th>本番での候補の種類</th></tr></thead>
@@ -178,7 +178,7 @@ export function renderPartsPage(el: HTMLElement) {
 // ------------------------------------------------------------------ データの扱い
 export function renderDataPage(el: HTMLElement) {
   el.innerHTML = `<div class="page">
-    <h1>データの扱い</h1>
+    <div class="page-hero"><span class="big-ico" aria-hidden="true">🔒</span><div><h1>データの扱い</h1><p>子どもと学校のデータを、外に出さない</p></div></div>
     <p class="lead">このデモは、サーバーを持たず、すべてブラウザの中で動きます。APIキーは使っていません。</p>
     <table class="data"><thead><tr><th style="width:26%">項目</th><th>このデモでの扱い</th></tr></thead><tbody>
       <tr><td>外部に送られるもの</td><td><b>マイクを使ったときの、ブラウザ標準の音声認識だけ</b>です。Chrome では、音声認識のために音声がブラウザの提供元のサーバーに送られます（ブラウザの仕組みによるもので、このデモが送り先を選んでいるわけではありません）。見本と文字の入力では、外部には何も送りません。</td></tr>

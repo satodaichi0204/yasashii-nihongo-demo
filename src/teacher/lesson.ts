@@ -8,6 +8,7 @@ import { cardsFor } from "../glossary/cards";
 import { loadPhrases, savePhrases, type Phrase } from "../glossary/store";
 import { autoRuby, collectReadings, stripRuby } from "../text/ruby";
 import { ELEMENT_LABEL, type Sample, type Warning } from "../types";
+import { heroSvg } from "../ui/art";
 import { $, $$, esc, highlight, ms, nowLabel } from "../ui/dom";
 import {
   channel,
@@ -54,6 +55,13 @@ const readings = () =>
   );
 
 let subjectFilter = "すべて";
+let heroMin = (() => {
+  try {
+    return localStorage.getItem("yasashii-demo.heroMin") === "1";
+  } catch {
+    return false;
+  }
+})();
 let inputTab: "sample" | "mic" | "text" | "phrase" = "sample";
 const mic = new MicMonitor();
 let recording = false;
@@ -62,9 +70,31 @@ let recTimer = 0;
 
 export function renderLesson(el: HTMLElement) {
   el.innerHTML = `
+  <section class="hero ${heroMin ? "min" : ""}" id="hero">
+    <div class="hero-body">
+      <button class="btn small close" id="heroToggle">${heroMin ? "説明をひらく" : "説明をとじる"}</button>
+      <h1>先生のことばを、<span class="hl">やさしい日本語</span>と<span class="hl">母語</span>で、<br>教室のみんなに とどけます</h1>
+      <p>話した指示を、やさしい日本語と2つのことばに変えて、拡張ディスプレイに大きく表示します。<br>大事な意味（「〜しない」「3ページ」「〜したら」など）が消えていないかを自動で確かめ、<b>先生が確認したものだけ</b>を子どもたちに見せます。</p>
+      <div class="pills">
+        <span class="pill">🔍 意味の取りこぼしを自動でチェック</span>
+        <span class="pill">📘 教科の用語カード</span>
+        <span class="pill">✅ 先生の確認が必須</span>
+        <span class="pill">🔑 APIキーなし・0円</span>
+      </div>
+      <div class="row">
+        <button class="btn sun big" id="heroSample">▶ 見本で試してみる</button>
+        <button class="btn big" id="heroMic">🎤 マイクで話す</button>
+        <button class="btn big" id="heroStudent">📺 児童向けの画面を開く</button>
+      </div>
+    </div>
+    <div class="hero-art-wrap">${heroSvg}</div>
+  </section>
+
+  <nav class="stepper" id="stepper" aria-label="進み具合"></nav>
+
   <div class="lesson">
     <section class="col-input">
-      <div class="card">
+      <div class="card" id="cardInput">
         <h2><span class="step">1</span>指示を入れる</h2>
         <div class="seg" role="tablist" id="inputTabs">
           <button data-tab="sample">見本から選ぶ</button>
@@ -90,12 +120,12 @@ export function renderLesson(el: HTMLElement) {
     </section>
 
     <section class="col-work">
-      <div class="card box-orig">
+      <div class="card box-orig" id="cardOrig">
         <header><h2><span class="step">2</span><span class="label-orig">原文</span> 先生の指示</h2><span id="origMeta" class="hint"></span></header>
         <textarea id="original" rows="2" placeholder="見本を選ぶか、マイクで話すと、ここに入ります（直接書き直すこともできます）"></textarea>
       </div>
 
-      <div class="card box-easy">
+      <div class="card box-easy" id="cardEasy">
         <header>
           <h2><span class="step">3</span><span class="label-easy">やさしい日本語</span></h2>
           <div class="seg" id="variantSeg"></div>
@@ -113,7 +143,7 @@ export function renderLesson(el: HTMLElement) {
         <p class="note">否定、順序、数量、条件、教科の用語、指示語、言い直しを、原文と比べて確かめます。正しい言い換えでも警告が出ることがあります（例：「忘れないで」→「必ず持ってくる」）。授業では、<b>見逃すより警告を出す側</b>に倒しています。</p>
       </div>
 
-      <div class="card">
+      <div class="card" id="cardTr">
         <header>
           <h2><span class="step">5</span>翻訳</h2>
           <button class="btn primary small" id="translateBtn">翻訳を作る</button>
@@ -122,14 +152,14 @@ export function renderLesson(el: HTMLElement) {
         <p class="note" id="trNote"></p>
       </div>
 
-      <div class="card">
+      <div class="card" id="cardConfirm">
         <header><h2><span class="step">6</span>先生の確認</h2><span id="confirmBadge"></span></header>
         <div id="confirmBody"></div>
       </div>
     </section>
 
     <section class="col-display">
-      <div class="card">
+      <div class="card" id="cardDisplay">
         <h2><span class="step">7</span>児童向けの画面</h2>
         <div id="conn"></div>
         <div class="row" style="margin-top:8px">
@@ -423,6 +453,7 @@ export function renderLesson(el: HTMLElement) {
         if (state.readyAt) state.timings.review = performance.now() - state.readyAt;
         renderConfirm();
         renderDisplay();
+        $(el, "#confirmBody").firstElementChild?.classList.add("confirmed-burst");
       };
     renderDisplay();
   };
@@ -465,9 +496,13 @@ export function renderLesson(el: HTMLElement) {
     $(el, "#showMsg").innerHTML = ok
       ? ""
       : `<span>🔒 先生が確認済みにするまで、児童向けの画面には表示できません。</span>`;
-    renderPreview();
+    renderPreviewAndSteps();
   };
 
+  const renderPreviewAndSteps = () => {
+    renderPreview();
+    renderStepper();
+  };
   const renderPreview = () => {
     const p = state.shown;
     const d = state.display;
@@ -516,6 +551,10 @@ export function renderLesson(el: HTMLElement) {
     channel.send({ type: "show", payload, options: state.display });
     $(el, "#showMsg").textContent = state.studentConnected ? "表示しました。" : "表示しました（児童向けの画面を開くと、この内容が出ます）。";
     renderDisplay();
+    const pv = $(el, "#preview");
+    pv.classList.remove("flash");
+    void pv.offsetWidth;
+    pv.classList.add("flash");
   };
   $(el, "#reshowBtn").onclick = () => {
     if (state.shown) channel.send({ type: "show", payload: state.shown, options: state.display });
@@ -797,6 +836,61 @@ export function renderLesson(el: HTMLElement) {
       }
     };
   }
+
+  // ------------------------------------------------------------------ ようこその帯
+  const hero = $(el, "#hero");
+  $(el, "#heroToggle").onclick = () => {
+    heroMin = !heroMin;
+    hero.classList.toggle("min", heroMin);
+    $(el, "#heroToggle").textContent = heroMin ? "説明をひらく" : "説明をとじる";
+    try {
+      localStorage.setItem("yasashii-demo.heroMin", heroMin ? "1" : "0");
+    } catch {
+      // 保存できない環境では、この画面の間だけ
+    }
+  };
+  const goTo = (id: string) => $(el, `#${id}`).scrollIntoView({ behavior: "smooth", block: "start" });
+  $(el, "#heroSample").onclick = () => {
+    inputTab = "sample";
+    renderInput();
+    loadSample(SAMPLES[0]);
+    goTo("cardEasy");
+  };
+  $(el, "#heroMic").onclick = () => {
+    inputTab = "mic";
+    renderInput();
+    goTo("cardInput");
+  };
+  $(el, "#heroStudent").onclick = async () => {
+    $(el, "#openMsg").textContent = await openStudentWindow();
+  };
+
+  // ------------------------------------------------------------------ 進み具合（6つの段階）
+  const renderStepper = () => {
+    const s = state.session;
+    const open = unacknowledged(s).length;
+    const stale = s.langs.some((l) => isStale(s, l));
+    const ok = canDisplay(s);
+    const steps = [
+      { icon: "🎤", label: "指示を入れる", sub: "見本・マイク・文字", done: !!s.original, blocked: false, target: "cardInput" },
+      { icon: "✏️", label: "やさしくする", sub: "やさしい日本語", done: !!s.easy, blocked: false, target: "cardEasy" },
+      { icon: "🔍", label: "チェック", sub: open ? `警告 ${open}件` : "意味の取りこぼし", done: !!s.easy && open === 0, blocked: open > 0, target: "checkCard" },
+      { icon: "🌏", label: "ほんやく", sub: s.easy && stale ? "作り直しが必要" : "2つのことば", done: !!s.easy && !stale, blocked: !!s.easy && stale, target: "cardTr" },
+      { icon: "✅", label: "先生のかくにん", sub: ok ? "確認済み" : "まだ", done: ok, blocked: false, target: "cardConfirm" },
+      { icon: "📺", label: "子どもの画面へ", sub: state.shown ? "表示中" : "まだ", done: !!state.shown && ok, blocked: false, target: "cardDisplay" },
+    ];
+    const current = steps.findIndex((x) => !x.done);
+    $(el, "#stepper").innerHTML = steps
+      .map(
+        (x, i) => `<button type="button" data-goto="${x.target}" class="${x.done ? "done" : ""} ${i === current ? "current" : ""} ${x.blocked ? "blocked" : ""}" aria-current="${i === current ? "step" : "false"}">
+          <span class="dot" aria-hidden="true">${x.done ? "✔" : x.blocked ? "⚠" : x.icon}</span>
+          <span>${i + 1}. ${esc(x.label)}</span>
+          <small>${esc(x.sub)}</small>
+        </button>`,
+      )
+      .join("");
+    $$(el, "[data-goto]").forEach((b) => (b.onclick = () => goTo(b.dataset.goto!)));
+  };
 
   // ------------------------------------------------------------------ はじめの表示
   renderInput();

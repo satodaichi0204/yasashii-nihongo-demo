@@ -6,6 +6,7 @@ import { Channel, type DisplayOptions, type DisplayPayload } from "../channel/ch
 import { DEFAULT_LANGS } from "../data/languages";
 import { loadGlossary, loadSettings, saveSettings, type Settings } from "../glossary/store";
 import type { GlossaryTerm, Sample } from "../types";
+import { logoSvg } from "../ui/art";
 import { $, esc } from "../ui/dom";
 import { renderLesson } from "./lesson";
 import { renderDataPage, renderGlossaryPage, renderPartsPage, renderPhrasesPage, renderResultsPage } from "./pages";
@@ -139,22 +140,22 @@ export async function openStudentWindow(): Promise<string> {
 }
 
 // ------------------------------------------------------------------ ページの切り替え
-const PAGES: { hash: string; label: string; render: (el: HTMLElement) => void | (() => void) }[] = [
-  { hash: "#/", label: "授業（教師用）", render: renderLesson },
-  { hash: "#/glossary", label: "教科の用語集", render: renderGlossaryPage },
-  { hash: "#/phrases", label: "定型文", render: renderPhrasesPage },
-  { hash: "#/results", label: "検証結果", render: renderResultsPage },
-  { hash: "#/parts", label: "本番での差し替えの考え方", render: renderPartsPage },
-  { hash: "#/data", label: "データの扱い", render: renderDataPage },
+const PAGES: { hash: string; label: string; icon: string; render: (el: HTMLElement) => void | (() => void) }[] = [
+  { hash: "#/", label: "授業（教師用）", icon: "🏫", render: renderLesson },
+  { hash: "#/glossary", label: "教科の用語集", icon: "📘", render: renderGlossaryPage },
+  { hash: "#/phrases", label: "定型文", icon: "⭐", render: renderPhrasesPage },
+  { hash: "#/results", label: "検証結果", icon: "📊", render: renderResultsPage },
+  { hash: "#/parts", label: "本番での差し替えの考え方", icon: "🔧", render: renderPartsPage },
+  { hash: "#/data", label: "データの扱い", icon: "🔒", render: renderDataPage },
 ];
 
 export function mountApp(root: HTMLElement) {
   root.innerHTML = `
     <header class="topbar">
-      <div class="brand">やさしい日本語＋多言語 教室表示<small>デモ版（APIキー不使用・ブラウザだけで動作）</small></div>
-      <nav class="nav" aria-label="ページ">${PAGES.map((p) => `<a href="${p.hash}">${esc(p.label)}</a>`).join("")}</nav>
+      <a class="brand" href="#/">${logoSvg}<span><b>やさしい日本語＋多言語 教室表示</b><small>デモ版（APIキー不使用・ブラウザだけで動作）</small></span></a>
+      <nav class="nav" aria-label="ページ">${PAGES.map((p) => `<a href="${p.hash}"><span class="ico" aria-hidden="true">${p.icon}</span>${esc(p.label)}</a>`).join("")}</nav>
       <span class="spacer"></span>
-      <span class="demo-flag">デモ：生成AIは使っていません</span>
+      <span class="demo-flag" title="このデモは生成AIを使っていません"><span class="full">デモ：生成AIは使っていません</span><span class="short">生成AI不使用</span></span>
     </header>
     <main id="page"></main>
     <aside class="parts" id="parts" aria-label="今使っている部品"></aside>`;
@@ -172,17 +173,35 @@ export function mountApp(root: HTMLElement) {
   window.addEventListener("hashchange", route);
   route();
 
+  // 画面の隅の「今使っている部品」。ふだんは1行の小さな札で、押すとくわしく開く（画面の内容を隠さないように）
+  let partsOpen = false;
   const renderParts = () => {
-    $(root, "#parts").innerHTML = `<b>今使っている部品</b>
-      <dl>
-        <dt>音声認識</dt><dd>${esc(state.parts.speech)}</dd>
-        <dt>やさしい日本語化</dt><dd>${esc(state.parts.easy)}</dd>
-        <dt>翻訳</dt><dd>${esc(state.parts.translate)}</dd>
-      </dl>
-      <a href="#/parts">差し替えの考え方 →</a>`;
+    const p = state.parts;
+    $(root, "#parts").innerHTML = `
+      <button type="button" class="parts-chip" aria-expanded="${partsOpen}">🧩 <b>今使っている部品</b>：${esc(p.speech.replace(/（.*/, ""))}・${esc(p.easy)}・${esc(p.translate)}</button>
+      ${
+        partsOpen
+          ? `<dl>
+              <dt>音声認識</dt><dd>${esc(p.speech)}</dd>
+              <dt>やさしい日本語化</dt><dd>${esc(p.easy)}</dd>
+              <dt>翻訳</dt><dd>${esc(p.translate)}</dd>
+            </dl>
+            <a href="#/parts">差し替えの考え方 →</a>`
+          : ""
+      }`;
+    $(root, ".parts-chip").onclick = () => {
+      partsOpen = !partsOpen;
+      renderParts();
+    };
   };
   onAppChange(renderParts);
   renderParts();
+
+  // 上の帯の高さ（画面の幅で2段になることがある）に合わせて、進み具合の帯の位置を決める
+  const topbar = $(root, ".topbar");
+  const syncTop = () => document.documentElement.style.setProperty("--topbar-h", `${topbar.offsetHeight}px`);
+  new ResizeObserver(syncTop).observe(topbar);
+  syncTop();
   if (__SINGLE_FILE__ || location.protocol === "file:") {
     // 1ファイル版の注意（ファイルを直接開くと、マイクや音声認識が動かない場合がある）
     const note = document.createElement("div");
