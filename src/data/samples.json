@@ -1,0 +1,282 @@
+[
+  {
+    "id": "s01", "subject": "算数", "scene": "授業",
+    "original": "三角形の面積は、底辺かける高さ割る2で求めます。単位を書き忘れないようにしましょう。",
+    "easyRuby": "[三角形|さんかくけい]の [面積|めんせき]は、「[底辺|ていへん] × [高|たか]さ ÷ 2」で [出|だ]します。[単位|たんい]を わすれないで [書|か]きましょう。",
+    "mistakes": [
+      { "text": "三角形の 広さは、下の 線と 高さを かけて、2で わります。単位を 書きましょう。", "drops": ["term", "negation"], "note": "「面積」「底辺」が別の言葉になり、「忘れないように」の否定が消えた" },
+      { "text": "三角形の 面積は、「底辺 × 高さ ÷ 3」で 出します。単位を わすれないで 書きましょう。", "drops": ["quantity"], "note": "「割る2」が「÷ 3」に変わった" }
+    ],
+    "translations": {
+      "pt": "A área do triângulo é calculada com «lado de baixo × altura ÷ 2». Não se esqueça de escrever a unidade.",
+      "zh": "三角形的面积用「底边 × 高 ÷ 2」来求。不要忘记写单位。"
+    },
+    "elements": ["term", "quantity", "negation"]
+  },
+  {
+    "id": "s02", "subject": "国語", "scene": "授業",
+    "original": "まず教科書の48ページを開いてください。次に、2つ目の段落を声に出さずに読んでください。",
+    "easyRuby": "まず [教科書|きょうかしょ]の 48ページを [開|ひら]いて ください。[次|つぎ]に、2つ[目|め]の [段落|だんらく]を、[声|こえ]を [出|だ]さないで [読|よ]んで ください。",
+    "mistakes": [
+      { "text": "教科書の 48ページを 開いて、2つ目の 段落を 声に 出して 読んで ください。", "drops": ["order", "negation"], "note": "「まず」「次に」と「声に出さずに」が消え、声に出して読む指示に変わった" },
+      { "text": "まず 教科書の 58ページを 開いて ください。次に、2つ目の 段落を、声を 出さないで 読んで ください。", "drops": ["quantity"], "note": "48ページが58ページに変わった" }
+    ],
+    "translations": {
+      "pt": "Primeiro, abram o livro didático na página 48. Depois, leiam o 2º parágrafo sem falar em voz alta.",
+      "zh": "首先，打开课本第48页。然后，不出声地读第2个段落。"
+    },
+    "elements": ["order", "quantity", "term", "negation"]
+  },
+  {
+    "id": "s03", "subject": "算数", "scene": "授業",
+    "original": "3ページ、いや4ページを開いてください。",
+    "easyRuby": "4ページを [開|ひら]いて ください。",
+    "mistakes": [
+      { "text": "3ページを 開いて ください。", "drops": ["restatement"], "note": "言い直す前の「3ページ」が残った" },
+      { "text": "3ページと 4ページを 開いて ください。", "drops": ["restatement"], "note": "言い直す前と後の両方が残った" }
+    ],
+    "translations": {
+      "pt": "Abram na página 4.",
+      "zh": "请打开第4页。"
+    },
+    "elements": ["restatement", "quantity"]
+  },
+  {
+    "id": "s04", "subject": "理科", "scene": "実験",
+    "original": "実験が終わったら、ガスバーナーの火を消してから、片付けを始めてください。火が消えるまで、器具にさわってはいけません。",
+    "easyRuby": "[実験|じっけん]が [終|お]わったら、まず ガスバーナーの [火|ひ]を [消|け]して ください。そのあとで、[片付|かたづ]けを [始|はじ]めて ください。[火|ひ]が [消|き]えるまで、[器具|きぐ]（[道具|どうぐ]）に さわっては いけません。",
+    "mistakes": [
+      { "text": "実験が 終わったら、片付けを 始めて ください。そのあとで、ガスバーナーの 火を 消して ください。火が 消えるまで、器具に さわっては いけません。", "drops": ["order"], "note": "火を消すことと片付けの順番が入れ替わった" },
+      { "text": "実験が 終わったら、ガスバーナーの 火を 消して、片付けを して ください。火が 消えるまで、器具に さわって ください。", "drops": ["order", "negation"], "note": "「消してから」の順序と「さわってはいけません」の否定が消えた" }
+    ],
+    "translations": {
+      "pt": "Quando o experimento terminar, primeiro apaguem o fogo do bico de Bunsen. Depois disso, comecem a arrumar. Até o fogo se apagar, não toquem nos instrumentos.",
+      "zh": "实验结束后，先关掉本生灯的火。然后，开始收拾。在火熄灭之前，不要碰器具。"
+    },
+    "elements": ["term", "order", "negation"]
+  },
+  {
+    "id": "s05", "subject": "体育", "scene": "授業",
+    "original": "2人1組になって、準備体操をしてください。笛が鳴ったら、すぐに集合してください。",
+    "easyRuby": "2[人|にん] 1[組|くみ]に なって、[準備|じゅんび][体操|たいそう]を して ください。ふえが [鳴|な]ったら、すぐに [集|あつ]まって ください。",
+    "mistakes": [
+      { "text": "2人 1組に なって、準備体操を して ください。ふえが 鳴ります。すぐに 集まって ください。", "drops": ["condition"], "note": "「笛が鳴ったら」の条件が消え、すぐ集まる指示に変わった" },
+      { "text": "3人 1組に なって、準備体操を して ください。ふえが 鳴ったら、すぐに 集まって ください。", "drops": ["quantity"], "note": "2人が3人に変わった" }
+    ],
+    "translations": {
+      "pt": "Formem duplas (2 pessoas em 1 grupo) e façam o aquecimento. Quando o apito tocar, reúnam-se imediatamente.",
+      "zh": "2人1组，做准备运动。哨子响了以后，马上集合。"
+    },
+    "elements": ["quantity", "condition"]
+  },
+  {
+    "id": "s06", "subject": "社会", "scene": "授業",
+    "original": "地図帳の都道府県の地図を見て、自分の住んでいる県に赤で丸をつけてください。ほかの県には、まだ何も書かないでください。",
+    "easyRuby": "[地図帳|ちずちょう]の [都道府県|とどうふけん]の [地図|ちず]を [見|み]て ください。[自分|じぶん]が [住|す]んで いる [県|けん]に、[赤|あか]で まるを つけて ください。ほかの [県|けん]には、まだ [何|なに]も [書|か]かないで ください。",
+    "mistakes": [
+      { "text": "地図帳の 日本の 地図を 見て、住んで いる 県に 赤で まるを つけて、ほかの 県にも 書いて ください。", "drops": ["term", "negation"], "note": "「都道府県」が消え、「書かないで」が「書いて」に変わった" },
+      { "text": "地図帳の 都道府県の 地図を 見て ください。ここに 赤で まるを つけて ください。ほかの 県には、まだ 何も 書かないで ください。", "drops": ["demonstrative"], "note": "「自分の住んでいる県」が「ここ」になり、何を指すか分からない" }
+    ],
+    "translations": {
+      "pt": "Olhem o mapa das províncias do Japão no atlas. Façam um círculo vermelho na província onde vocês moram. Ainda não escrevam nada nas outras províncias.",
+      "zh": "请看地图册上的都道府县地图。在自己住的县上用红色画圈。其他的县，先什么都不要写。"
+    },
+    "elements": ["term", "negation"]
+  },
+  {
+    "id": "s07", "subject": "生活", "scene": "持ち物",
+    "original": "明日は図工でのりとはさみを使うので、忘れずに持ってきてください。持っていない人は、先生に言ってください。",
+    "easyRuby": "[明日|あした]は [図工|ずこう]で、のりと はさみを [使|つか]います。わすれないで [持|も]って きて ください。[持|も]って いない [人|ひと]は、[先生|せんせい]に [言|い]って ください。",
+    "mistakes": [
+      { "text": "明日は 図工で、のりと はさみを 使います。かならず 持って きて ください。持って いる 人は、先生に 言って ください。", "drops": ["negation"], "note": "「持っていない人」が「持っている人」に変わった（「忘れずに」→「かならず」は正しい言い換え）" },
+      { "text": "明日は 図工で、のりと はさみを 使います。わすれないで 持って きて ください。持って いる 人は、先生に 言って ください。", "drops": ["negation"], "note": "「持っていない人」が「持っている人」に変わった" }
+    ],
+    "translations": {
+      "pt": "Amanhã, na aula de artes, vamos usar cola e tesoura. Não se esqueçam de trazê-las. Quem não tiver, avise o professor.",
+      "zh": "明天的美术课要用胶水和剪刀。不要忘记带来。没有的同学，请告诉老师。"
+    },
+    "elements": ["negation"]
+  },
+  {
+    "id": "s08", "subject": "生活", "scene": "提出",
+    "original": "宿題のプリントは、金曜日までに出してください。ただし、休んだ場合は月曜日でもいいです。",
+    "easyRuby": "[宿題|しゅくだい]の プリントは、[金曜日|きんようび]までに [出|だ]して ください。でも、[学校|がっこう]を [休|やす]んだ ときは、[月曜日|げつようび]でも いいです。",
+    "mistakes": [
+      { "text": "宿題の プリントは、金曜日までに 出して ください。休んだ 人は、月曜日に 出して ください。", "drops": ["condition"], "note": "「ただし、〜場合は〜でもいい」の条件と許可が、全員への指示に変わった" },
+      { "text": "宿題の プリントは、月曜日までに 出して ください。", "drops": ["condition"], "note": "条件が消え、しめきりも変わった" }
+    ],
+    "translations": {
+      "pt": "Entreguem a folha do dever de casa até sexta-feira. Mas, se vocês faltarem à escola, podem entregar na segunda-feira.",
+      "zh": "作业的练习纸请在星期五之前交。但是，如果请假没来学校，星期一交也可以。"
+    },
+    "elements": ["condition"]
+  },
+  {
+    "id": "s09", "subject": "安全", "scene": "避難訓練",
+    "original": "地震が起きたら、まず机の下にもぐってください。揺れが止まるまで、外に出てはいけません。",
+    "easyRuby": "[地震|じしん]が きたら、まず [机|つくえ]の [下|した]に もぐって ください。ゆれが [止|と]まるまで、[外|そと]に [出|で]ては いけません。",
+    "mistakes": [
+      { "text": "地震が きたら、外に 出て ください。", "drops": ["order", "negation"], "note": "「まず机の下に」が消え、「出てはいけません」が「出てください」に変わった（危険）" },
+      { "text": "地震です。机の 下に もぐって ください。ゆれが 止まるまで、外に 出ては いけません。", "drops": ["condition", "order"], "note": "「地震が起きたら」の条件と「まず」が消えた" }
+    ],
+    "translations": {
+      "pt": "Se houver um terremoto, primeiro entrem debaixo da carteira. Até o tremor parar, não saiam para fora.",
+      "zh": "如果发生地震，首先钻到桌子下面。摇晃停止之前，不可以到外面去。"
+    },
+    "elements": ["condition", "order", "negation"]
+  },
+  {
+    "id": "s10", "subject": "算数", "scene": "授業",
+    "original": "分数の問題は、問3から問6までやってください。終わった人は、答え合わせをしてください。",
+    "easyRuby": "[分数|ぶんすう]の [問題|もんだい]を、[問|もん]3から [問|もん]6まで やって ください。[終|お]わった [人|ひと]は、[答|こた]え[合|あ]わせを して ください。",
+    "mistakes": [
+      { "text": "分数の 問題を、問3から 問5まで やって ください。終わった 人は、答え合わせを して ください。", "drops": ["quantity"], "note": "問6が問5に変わった" },
+      { "text": "数の 問題を、問3から 問6まで やって ください。終わった 人は、答え合わせを して ください。", "drops": ["term"], "note": "「分数」が「数」に変わった" }
+    ],
+    "translations": {
+      "pt": "Façam os exercícios de fração, da questão 3 até a questão 6. Quem terminar, confira as respostas.",
+      "zh": "分数的题目，请做第3题到第6题。做完的同学，请对答案。"
+    },
+    "elements": ["term", "quantity"]
+  },
+  {
+    "id": "s11", "subject": "国語", "scene": "作文",
+    "original": "作文を書くときは、句読点の位置に気をつけてください。原稿用紙のマスには、1マスに1字ずつ書きます。",
+    "easyRuby": "[作文|さくぶん]を [書|か]く ときは、[句読点|くとうてん]（「、」と「。」）の [場所|ばしょ]に [気|き]を つけて ください。[原稿|げんこう][用紙|ようし]の マスには、1マスに 1[字|じ]ずつ [書|か]きます。",
+    "mistakes": [
+      { "text": "作文を 書く ときは、点と 丸の 場所に 気を つけて ください。原稿用紙の マスには、1マスに 1字ずつ 書きます。", "drops": ["term"], "note": "「句読点」が「点と丸」に変わった" },
+      { "text": "作文では、句読点の 場所に 気を つけて ください。原稿用紙の マスには、1マスに 2字ずつ 書きます。", "drops": ["condition", "quantity"], "note": "「書くときは」の条件が消え、1字が2字に変わった" }
+    ],
+    "translations": {
+      "pt": "Quando escreverem a redação, prestem atenção ao lugar da pontuação (「、」 e 「。」). No papel quadriculado, escrevam 1 letra em cada 1 quadrado.",
+      "zh": "写作文的时候，请注意标点符号（「、」和「。」）的位置。在稿纸的格子里，1格写1个字。"
+    },
+    "elements": ["condition", "term", "quantity"]
+  },
+  {
+    "id": "s12", "subject": "理科", "scene": "観察",
+    "original": "気温は、温度計に日光が直接当たらないようにして、地面から1.2メートルの高さではかります。",
+    "easyRuby": "[気温|きおん]は、[温度計|おんどけい]に [日光|にっこう]が [直接|ちょくせつ] [当|あ]たらないように して、[地面|じめん]から 1.2メートルの [高|たか]さで はかります。",
+    "mistakes": [
+      { "text": "気温は、温度計に 日光を 当てて、地面から 1.2メートルの 高さで はかります。", "drops": ["negation"], "note": "「当たらないように」が「当てて」に変わった" },
+      { "text": "空気の あたたかさは、温度計で、地面から 12メートルの 高さで はかります。", "drops": ["term", "quantity", "negation"], "note": "「気温」が言い換えられ、1.2メートルが12メートルに変わり、否定も消えた" }
+    ],
+    "translations": {
+      "pt": "A temperatura do ar é medida a 1,2 metro de altura do chão, sem deixar a luz do sol bater diretamente no termômetro.",
+      "zh": "测量气温时，不要让阳光直接照到温度计上，在离地面1.2米的高处测量。"
+    },
+    "elements": ["term", "negation", "quantity"]
+  },
+  {
+    "id": "s13", "subject": "社会", "scene": "授業",
+    "original": "地図記号を覚えたら、次のページの問題に進んでください。覚えていない人は、もう一度教科書を見てもいいです。",
+    "easyRuby": "[地図|ちず][記号|きごう]を おぼえたら、[次|つぎ]の ページの [問題|もんだい]に [進|すす]んで ください。まだ おぼえて いない [人|ひと]は、もう [一度|いちど] [教科書|きょうかしょ]を [見|み]ても いいです。",
+    "mistakes": [
+      { "text": "地図記号を おぼえて ください。次の ページの 問題に 進んで ください。まだ おぼえて いない 人は、もう 一度 教科書を 見ても いいです。", "drops": ["condition"], "note": "「覚えたら」の条件が消え、全員が先に進む指示に変わった" },
+      { "text": "地図の しるしを おぼえたら、次の ページの 問題に 進んで ください。おぼえた 人は、もう 一度 教科書を 見ても いいです。", "drops": ["term", "negation"], "note": "「地図記号」が言い換えられ、「覚えていない人」が「覚えた人」に変わった" }
+    ],
+    "translations": {
+      "pt": "Quando tiverem memorizado os símbolos do mapa, passem para os exercícios da próxima página. Quem ainda não memorizou pode olhar o livro didático mais uma vez.",
+      "zh": "记住地图符号以后，请做下一页的题目。还没有记住的同学，可以再看一次课本。"
+    },
+    "elements": ["term", "condition", "negation"]
+  },
+  {
+    "id": "s14", "subject": "算数", "scene": "授業",
+    "original": "直角を見つけるときは、三角定規の直角のところを当ててたしかめます。ぴったり重ならないものは、直角ではありません。",
+    "easyRuby": "[直角|ちょっかく]を [見|み]つける ときは、[三角|さんかく][定規|じょうぎ]の [直角|ちょっかく]の ところを あてて、たしかめます。ぴったり [重|かさ]ならない ものは、[直角|ちょっかく]では ありません。",
+    "mistakes": [
+      { "text": "かどを 見つける ときは、三角定規の かどを あてて、たしかめます。ぴったり 重ならない ものは、かどでは ありません。", "drops": ["term"], "note": "「直角」が「かど」に変わった" },
+      { "text": "直角を 見つけます。三角定規の 直角の ところを あてて、たしかめます。ぴったり 重なる ものは、直角です。", "drops": ["condition", "negation"], "note": "「見つけるときは」の条件と、2つの否定が消えた" }
+    ],
+    "translations": {
+      "pt": "Para encontrar um ângulo reto, encostem o ângulo reto do esquadro e confiram. O que não se encaixa perfeitamente não é ângulo reto.",
+      "zh": "找直角的时候，用三角尺的直角对一对来确认。不能完全重合的，不是直角。"
+    },
+    "elements": ["term", "condition", "negation"]
+  },
+  {
+    "id": "s15", "subject": "生活", "scene": "給食",
+    "original": "給食の準備をする人は、手を洗ってから、白衣を着てください。マスクも忘れないでください。",
+    "easyRuby": "[給食|きゅうしょく]の [準備|じゅんび]を する [人|ひと]は、まず [手|て]を [洗|あら]って ください。そのあとで、[白衣|はくい]を [着|き]て ください。マスクも わすれないで ください。",
+    "mistakes": [
+      { "text": "給食の 準備を する 人は、白衣を 着て ください。そのあとで、手を 洗って ください。マスクも わすれないで ください。", "drops": ["order"], "note": "手を洗うことと白衣を着ることの順番が入れ替わった" },
+      { "text": "給食の 準備を する 人は、手を 洗って、白衣を 着て ください。マスクも つけて ください。", "drops": ["order", "negation"], "note": "「洗ってから」の順序が弱まり、「忘れないで」の否定が消えた" }
+    ],
+    "translations": {
+      "pt": "Quem for preparar a merenda, primeiro lave as mãos. Depois disso, vista o avental branco. Não se esqueça da máscara também.",
+      "zh": "准备午餐的同学，先洗手。然后，穿上白大褂。也不要忘记戴口罩。"
+    },
+    "elements": ["order", "negation"]
+  },
+  {
+    "id": "s16", "subject": "体育", "scene": "水泳",
+    "original": "プールサイドを走ってはいけません。先生が笛を2回吹いたら、すぐに水から上がってください。",
+    "easyRuby": "プールサイドを [走|はし]っては いけません。[先生|せんせい]が ふえを 2[回|かい] ふいたら、すぐに [水|みず]から [上|あ]がって ください。",
+    "mistakes": [
+      { "text": "プールサイドを 走っては いけません。先生が ふえを 1回 ふいたら、すぐに 水から 上がって ください。", "drops": ["quantity"], "note": "2回が1回に変わった" },
+      { "text": "プールサイドを 走って ください。先生が ふえを 2回 ふいたら、すぐに 水から 上がって ください。", "drops": ["negation"], "note": "「走ってはいけません」が「走ってください」に変わった（危険）" }
+    ],
+    "translations": {
+      "pt": "Não corram na borda da piscina. Quando o professor apitar 2 vezes, saiam da água imediatamente.",
+      "zh": "不可以在泳池边跑。老师吹2次哨子以后，马上从水里上来。"
+    },
+    "elements": ["negation", "condition", "quantity"]
+  },
+  {
+    "id": "s17", "subject": "国語", "scene": "授業",
+    "original": "この文の主語を見つけて、赤い線を引いてください。主語がない文もあります。",
+    "easyRuby": "[黒板|こくばん]の [文|ぶん]の [主語|しゅご]（「だれが」「なにが」に あたる ことば）を [見|み]つけて ください。[赤|あか]い [線|せん]を [引|ひ]いて ください。[主語|しゅご]が ない [文|ぶん]も あります。",
+    "mistakes": [
+      { "text": "この 文の 主語を 見つけて、赤い 線を 引いて ください。主語が ない 文も あります。", "drops": ["demonstrative"], "note": "「この文」が残り、児童向けの画面ではどの文か分からない" },
+      { "text": "黒板の 文の、だれが に あたる ことばを 見つけて、赤い 線を 引いて ください。どの 文にも あります。", "drops": ["term", "negation"], "note": "「主語」が消え、「主語がない文もある」が「どの文にもある」に変わった" }
+    ],
+    "translations": {
+      "pt": "Encontrem o sujeito (a palavra que diz «quem» ou «o quê») da frase do quadro. Passem uma linha vermelha. Há frases que não têm sujeito.",
+      "zh": "找出黑板上句子的主语（相当于「谁」「什么」的词）。画上红线。也有没有主语的句子。"
+    },
+    "elements": ["term", "negation", "demonstrative"]
+  },
+  {
+    "id": "s18", "subject": "理科", "scene": "実験",
+    "original": "ビーカーに水を100ミリリットル入れてください。もし色が変わったら、手をあげて先生に知らせてください。",
+    "easyRuby": "ビーカーに [水|みず]を 100ミリリットル [入|い]れて ください。もし [色|いろ]が [変|か]わったら、[手|て]を あげて、[先生|せんせい]に [教|おし]えて ください。",
+    "mistakes": [
+      { "text": "ビーカーに 水を 10ミリリットル 入れて ください。もし 色が 変わったら、手を あげて、先生に 教えて ください。", "drops": ["quantity"], "note": "100ミリリットルが10ミリリットルに変わった" },
+      { "text": "ビーカーに 水を 100ミリリットル 入れて ください。色が 変わります。手を あげて、先生に 教えて ください。", "drops": ["condition"], "note": "「もし〜たら」の条件が消え、必ず色が変わる話になった" }
+    ],
+    "translations": {
+      "pt": "Coloquem 100 mililitros de água no béquer. Se a cor mudar, levantem a mão e avisem o professor.",
+      "zh": "往烧杯里倒入100毫升水。如果颜色变了，请举手告诉老师。"
+    },
+    "elements": ["quantity", "condition"]
+  },
+  {
+    "id": "s19", "subject": "生活", "scene": "下校",
+    "original": "今日は雨なので、帰りの会が終わったら、昇降口に並んで待っていてください。保護者が迎えに来る人は、教室から出ないでください。",
+    "easyRuby": "[今日|きょう]は [雨|あめ]です。だから、[帰|かえ]りの [会|かい]が [終|お]わったら、[昇降口|しょうこうぐち]に ならんで [待|ま]って いて ください。おうちの [人|ひと]が むかえに [来|く]る [人|ひと]は、[教室|きょうしつ]から [出|で]ないで ください。",
+    "mistakes": [
+      { "text": "今日は 雨です。だから、帰りの 会が 終わったら、昇降口に ならんで 待って いて ください。おうちの 人が むかえに 来る 人は、教室から 出て ください。", "drops": ["negation"], "note": "「出ないでください」が「出てください」に変わった" },
+      { "text": "今日は 雨です。昇降口に ならんで 待って いて ください。おうちの 人が むかえに 来る 人は、教室から 出ないで ください。", "drops": ["order"], "note": "「帰りの会が終わったら」が消え、今すぐ並ぶ指示に変わった" }
+    ],
+    "translations": {
+      "pt": "Hoje está chovendo. Por isso, quando a reunião de saída terminar, façam fila na entrada e esperem. Quem for buscado pela família, não saia da sala de aula.",
+      "zh": "今天下雨。所以，放学班会结束后，请在鞋柜门口排队等着。家长来接的同学，请不要走出教室。"
+    },
+    "elements": ["order", "negation"]
+  },
+  {
+    "id": "s20", "subject": "算数", "scene": "授業",
+    "original": "教科書の52ページ、じゃなくて53ページの問2をやってください。終わったら、ノートを先生に出してください。",
+    "easyRuby": "[教科書|きょうかしょ]の 53ページの [問|もん]2を やって ください。[終|お]わったら、ノートを [先生|せんせい]に [出|だ]して ください。",
+    "mistakes": [
+      { "text": "教科書の 52ページの 問2を やって ください。終わったら、ノートを 先生に 出して ください。", "drops": ["restatement"], "note": "言い直す前の「52ページ」が残った" },
+      { "text": "教科書の 53ページの 問2を やって ください。ノートを 先生に 出して ください。", "drops": ["order"], "note": "「終わったら」が消え、すぐノートを出す指示に変わった" }
+    ],
+    "translations": {
+      "pt": "Façam a questão 2 da página 53 do livro didático. Quando terminarem, entreguem o caderno ao professor.",
+      "zh": "请做课本第53页的第2题。做完以后，把笔记本交给老师。"
+    },
+    "elements": ["restatement", "quantity", "order"]
+  }
+]

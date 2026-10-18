@@ -1,0 +1,92 @@
+[
+  {
+    "term": "三角形", "reading": "さんかくけい", "subject": "算数",
+    "easy": "3本の まっすぐな 線で かこまれた 形",
+    "translations": { "pt": "triângulo", "zh": "三角形", "en": "triangle", "vi": "hình tam giác", "es": "triángulo", "tl": "tatsulok" },
+    "aliases": { "pt": ["triangulo"], "en": ["trigon"] }
+  },
+  {
+    "term": "底辺", "reading": "ていへん", "subject": "算数",
+    "easy": "三角形の 下の 辺。面積を 出す ときに つかう",
+    "translations": { "pt": "base", "zh": "底边", "en": "base", "vi": "đáy", "es": "base", "tl": "base" },
+    "aliases": { "pt": ["lado de baixo"], "zh": ["底部", "底线"], "en": ["bottom side"], "vi": ["cạnh dưới"] }
+  },
+  {
+    "term": "高さ", "reading": "たかさ", "subject": "算数",
+    "easy": "底辺から 上の かどまで、まっすぐ はかった 長さ",
+    "translations": { "pt": "altura", "zh": "高", "en": "height", "vi": "chiều cao", "es": "altura", "tl": "taas" },
+    "aliases": { "zh": ["高度"] }
+  },
+  {
+    "term": "面積", "reading": "めんせき", "subject": "算数",
+    "easy": "形の 中の 広さ",
+    "translations": { "pt": "área", "zh": "面积", "en": "area", "vi": "diện tích", "es": "área", "tl": "lawak" },
+    "aliases": { "pt": ["tamanho"], "zh": ["大小"] }
+  },
+  {
+    "term": "単位", "reading": "たんい", "subject": "算数",
+    "easy": "長さや 広さを あらわす しるし（cm、㎠ など）",
+    "translations": { "pt": "unidade", "zh": "单位", "en": "unit", "vi": "đơn vị", "es": "unidad", "tl": "yunit" },
+    "aliases": {}
+  },
+  {
+    "term": "分数", "reading": "ぶんすう", "subject": "算数",
+    "easy": "1つを 同じ 大きさに 分けた うちの、いくつ分かを あらわす 数（1/2 など）",
+    "translations": { "pt": "fração", "zh": "分数", "en": "fraction", "vi": "phân số", "es": "fracción", "tl": "praksiyon" },
+    "aliases": {}
+  },
+  {
+    "term": "直角", "reading": "ちょっかく", "subject": "算数",
+    "easy": "ノートの かどと 同じ 形の 角（90度）",
+    "translations": { "pt": "ângulo reto", "zh": "直角", "en": "right angle", "vi": "góc vuông", "es": "ángulo recto", "tl": "tamang anggulo" },
+    "aliases": {}
+  },
+  {
+    "term": "句読点", "reading": "くとうてん", "subject": "国語",
+    "easy": "文の 中の「、」と「。」",
+    "translations": { "pt": "pontuação", "zh": "标点符号", "en": "punctuation", "vi": "dấu câu", "es": "signos de puntuación", "tl": "bantas" },
+    "aliases": { "zh": ["标点"] }
+  },
+  {
+    "term": "段落", "reading": "だんらく", "subject": "国語",
+    "easy": "文章の 中の まとまり。1字 下げて 書きはじめる",
+    "translations": { "pt": "parágrafo", "zh": "段落", "en": "paragraph", "vi": "đoạn văn", "es": "párrafo", "tl": "talata" },
+    "aliases": {}
+  },
+  {
+    "term": "主語", "reading": "しゅご", "subject": "国語",
+    "easy": "文の 中で「だれが」「なにが」に あたる ことば",
+    "translations": { "pt": "sujeito", "zh": "主语", "en": "subject", "vi": "chủ ngữ", "es": "sujeto", "tl": "simuno" },
+    "aliases": {}
+  },
+  {
+    "term": "気温", "reading": "きおん", "subject": "理科",
+    "easy": "空気の あたたかさ",
+    "translations": { "pt": "temperatura do ar", "zh": "气温", "en": "air temperature", "vi": "nhiệt độ không khí", "es": "temperatura del aire", "tl": "temperatura ng hangin" },
+    "aliases": { "pt": ["temperatura"], "en": ["temperature"] }
+  },
+  {
+    "term": "温度計", "reading": "おんどけい", "subject": "理科",
+    "easy": "あたたかさ（温度）を はかる 道具",
+    "translations": { "pt": "termômetro", "zh": "温度计", "en": "thermometer", "vi": "nhiệt kế", "es": "termómetro", "tl": "termometro" },
+    "aliases": {}
+  },
+  {
+    "term": "実験", "reading": "じっけん", "subject": "理科",
+    "easy": "じっさいに ためして、しらべる こと",
+    "translations": { "pt": "experimento", "zh": "实验", "en": "experiment", "vi": "thí nghiệm", "es": "experimento", "tl": "eksperimento" },
+    "aliases": { "pt": ["experiência"] }
+  },
+  {
+    "term": "都道府県", "reading": "とどうふけん", "subject": "社会",
+    "easy": "日本を 47に 分けた ところ（東京都、大阪府、北海道、〇〇県）",
+    "translations": { "pt": "províncias do Japão", "zh": "都道府县", "en": "prefectures", "vi": "các tỉnh thành Nhật Bản", "es": "prefecturas", "tl": "mga prefektura" },
+    "aliases": { "pt": ["prefeituras"], "zh": ["都道府縣"] }
+  },
+  {
+    "term": "地図記号", "reading": "ちずきごう", "subject": "社会",
+    "easy": "地図の 上で、学校や 病院などを あらわす しるし",
+    "translations": { "pt": "símbolos do mapa", "zh": "地图符号", "en": "map symbols", "vi": "ký hiệu bản đồ", "es": "símbolos del mapa", "tl": "simbolo sa mapa" },
+    "aliases": {}
+  }
+]

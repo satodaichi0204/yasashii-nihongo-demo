@@ -1,0 +1,25 @@
+{
+  "name": "yasashii-nihongo-demo",
+  "version": "1.0.0",
+  "description": "教室用「やさしい日本語＋多言語」表示のデモ版（APIキー不要、ブラウザだけで動作）",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && vite build --mode single && node -e \"require('fs').copyFileSync('dist-single/index.html','dist/yasashii-nihongo-demo-1file.html')\"",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.13.0",
+    "globals": "^17.13.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.2",
+    "vite": "^8.3.4",
+    "vite-plugin-singlefile": "^2.3.4",
+    "vitest": "^5.0.5"
+  },
+  "private": true
+}

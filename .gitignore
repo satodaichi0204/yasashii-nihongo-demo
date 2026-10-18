@@ -1,0 +1,15 @@
+# 秘密の情報（このデモでは使わないが念のため）
+.env
+.env.*
+!.env.example
+
+# 応募の作戦と依頼者の情報を含むため、公開リポジトリに入れない
+DEMO_SPEC.md
+
+# 依存パッケージとビルドの成果物
+node_modules/
+dist/
+.vercel/
+*.tsbuildinfo
+
+dist-single/
