@@ -95,7 +95,12 @@ export function createBrowserTranslate(): TranslatePart {
         }
         return { text: await t.translate(text) };
       } catch (e) {
-        return { error: `${NOT_AVAILABLE}（${(e as Error).message}）` };
+        const message = (e as Error).message;
+        // 初めて使う言語は、ボタンを押したとき（ユーザーの操作）にだけ、翻訳の準備（ダウンロード）を始められる
+        if (/user gesture/i.test(message)) {
+          return { error: `${langOf(lang).label}の翻訳は、初めて使うときに準備（ダウンロード）が必要です。「翻訳を作り直す」を押してください。` };
+        }
+        return { error: `${NOT_AVAILABLE}（${message}）` };
       }
     },
   };
