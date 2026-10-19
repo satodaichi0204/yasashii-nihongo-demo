@@ -13,3 +13,6 @@ dist/
 *.tsbuildinfo
 
 dist-single/
+
+# 写真（ぱくたそ）は再配布にあたるため、公開リポジトリには入れない（Vercel には CLI で直接アップロードする）
+public/photos/

@@ -1,4 +1,5 @@
 import "./style.css";
+import "./pages.css";
 import { mountStudent } from "./student/student";
 import { mountApp } from "./teacher/app";
 

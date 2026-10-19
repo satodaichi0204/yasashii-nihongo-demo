@@ -8,7 +8,6 @@ import { cardsFor } from "../glossary/cards";
 import { loadPhrases, savePhrases, type Phrase } from "../glossary/store";
 import { autoRuby, collectReadings, stripRuby } from "../text/ruby";
 import { ELEMENT_LABEL, type Sample, type Warning } from "../types";
-import { heroSvg } from "../ui/art";
 import { $, $$, esc, highlight, ms, nowLabel } from "../ui/dom";
 import {
   channel,
@@ -55,13 +54,7 @@ const readings = () =>
   );
 
 let subjectFilter = "すべて";
-let heroMin = (() => {
-  try {
-    return localStorage.getItem("yasashii-demo.heroMin") === "1";
-  } catch {
-    return false;
-  }
-})();
+let wizStep = 1;
 let inputTab: "sample" | "mic" | "text" | "phrase" = "sample";
 const mic = new MicMonitor();
 let recording = false;
@@ -70,118 +63,97 @@ let recTimer = 0;
 
 export function renderLesson(el: HTMLElement) {
   el.innerHTML = `
-  <section class="hero ${heroMin ? "min" : ""}" id="hero">
-    <div class="hero-body">
-      <button class="btn small close" id="heroToggle">${heroMin ? "説明をひらく" : "説明をとじる"}</button>
-      <h1>先生のことばを、<span class="hl">やさしい日本語</span>と<span class="hl">母語</span>で、<br>教室のみんなに とどけます</h1>
-      <p>話した指示を、やさしい日本語と2つのことばに変えて、拡張ディスプレイに大きく表示します。<br>大事な意味（「〜しない」「3ページ」「〜したら」など）が消えていないかを自動で確かめ、<b>先生が確認したものだけ</b>を子どもたちに見せます。</p>
-      <div class="pills">
-        <span class="pill">🔍 意味の取りこぼしを自動でチェック</span>
-        <span class="pill">📘 教科の用語カード</span>
-        <span class="pill">✅ 先生の確認が必須</span>
-        <span class="pill">🔑 APIキーなし・0円</span>
-      </div>
-      <div class="row">
-        <button class="btn sun big" id="heroSample">▶ 見本で試してみる</button>
-        <button class="btn big" id="heroMic">🎤 マイクで話す</button>
-        <button class="btn big" id="heroStudent">📺 児童向けの画面を開く</button>
-      </div>
-    </div>
-    <div class="hero-art-wrap">${heroSvg}</div>
-  </section>
+  <div class="use">
+    <nav class="wizard" id="stepper" aria-label="3つのステップ"></nav>
 
-  <nav class="stepper" id="stepper" aria-label="進み具合"></nav>
-
-  <div class="lesson">
-    <section class="col-input">
-      <div class="card" id="cardInput">
-        <h2><span class="step">1</span>指示を入れる</h2>
-        <div class="seg" role="tablist" id="inputTabs">
-          <button data-tab="sample">見本から選ぶ</button>
-          <button data-tab="mic">マイクで話す</button>
-          <button data-tab="text">文字で入力</button>
-          <button data-tab="phrase">定型文</button>
-        </div>
-        <div id="inputPanel"></div>
+    <section class="panel" data-panel="1">
+      <div class="panel-head"><h1><span class="pnum">1</span>話す・えらぶ</h1><p>先生の指示を入れます。まずは「見本から選ぶ」がおすすめです。</p></div>
+      <div class="choices" id="inputTabs" role="tablist">
+        <button data-tab="sample"><span class="c-ico">📋</span>見本から選ぶ<small>教室の指示20件</small></button>
+        <button data-tab="mic"><span class="c-ico">🎤</span>マイクで話す<small>自分の声で</small></button>
+        <button data-tab="text"><span class="c-ico">⌨️</span>文字で入力<small>マイクがないとき</small></button>
+        <button data-tab="phrase"><span class="c-ico">⭐</span>定型文<small>よく使う指示</small></button>
       </div>
-      <div class="card">
-        <h2>翻訳の設定</h2>
-        <div class="row" style="align-items:flex-start">
-          <label style="flex:1">言語1<select id="lang0"></select></label>
-          <label style="flex:1">言語2<select id="lang1"></select></label>
-        </div>
-        <p class="hint" style="margin-top:8px">翻訳元</p>
-        <div class="seg" id="sourceSeg">
-          <button data-source="easy">やさしい日本語</button>
-          <button data-source="original">原文</button>
-        </div>
-        <p class="note">言語の一覧はデータで持っているため、言語を足すのは1行の追加で済みます。初期値はポルトガル語と中国語です。</p>
-      </div>
+      <div class="card" id="cardInput"><div id="inputPanel"></div></div>
     </section>
 
-    <section class="col-work">
-      <div class="card box-orig" id="cardOrig">
-        <header><h2><span class="step">2</span><span class="label-orig">原文</span> 先生の指示</h2><span id="origMeta" class="hint"></span></header>
-        <textarea id="original" rows="2" placeholder="見本を選ぶか、マイクで話すと、ここに入ります（直接書き直すこともできます）"></textarea>
-      </div>
-
-      <div class="card box-easy" id="cardEasy">
-        <header>
-          <h2><span class="step">3</span><span class="label-easy">やさしい日本語</span></h2>
-          <div class="seg" id="variantSeg"></div>
-        </header>
-        <textarea id="easy" rows="3" placeholder="やさしい日本語"></textarea>
-        <div class="row" style="margin-top:6px">
-          <button class="btn small" id="reconvert">原文から作り直す（簡易変換）</button>
-          <span class="hint" id="easyNote"></span>
+    <section class="panel" data-panel="2">
+      <div class="panel-head"><h1><span class="pnum">2</span>たしかめる</h1><p>やさしい日本語と2つのことばを、先生がたしかめます。大事な意味が消えていたら、⚠で知らせます。</p></div>
+      <div class="pair">
+        <div class="card box-orig" id="cardOrig">
+          <header><h2><span class="label-orig">先生のことば</span></h2><span id="origMeta" class="hint"></span></header>
+          <textarea id="original" rows="3" placeholder="見本を選ぶか、マイクで話すと、ここに入ります"></textarea>
+        </div>
+        <div class="card box-easy" id="cardEasy">
+          <header><h2><span class="label-easy">やさしい日本語</span></h2><div class="seg" id="variantSeg"></div></header>
+          <textarea id="easy" rows="3" placeholder="やさしい日本語"></textarea>
+          <div class="row" style="margin-top:8px">
+            <button class="btn small" id="reconvert">作り直す（簡易変換）</button>
+            <span class="hint" id="easyNote"></span>
+          </div>
         </div>
       </div>
 
       <div class="card" id="checkCard">
-        <header><h2><span class="step">4</span>意味の取りこぼしの照合</h2><span id="checkBadge"></span></header>
+        <header><h2>🔍 意味のチェック</h2><span id="checkBadge"></span></header>
         <div id="checkBody"></div>
-        <p class="note">否定、順序、数量、条件、教科の用語、指示語、言い直しを、原文と比べて確かめます。正しい言い換えでも警告が出ることがあります（例：「忘れないで」→「必ず持ってくる」）。授業では、<b>見逃すより警告を出す側</b>に倒しています。</p>
+        <details class="more"><summary>チェックのしくみ</summary>
+          <p class="note">否定、順序、数量、条件、教科の用語、指示語、言い直しを、先生のことばと比べて確かめます。正しい言い換えでも⚠が出ることがあります（例：「忘れないで」→「必ず持ってくる」）。授業では、<b>見逃すより知らせる</b>ほうを選んでいます。</p>
+        </details>
       </div>
 
       <div class="card" id="cardTr">
-        <header>
-          <h2><span class="step">5</span>翻訳</h2>
-          <button class="btn primary small" id="translateBtn">翻訳を作る</button>
-        </header>
+        <header><h2>🌏 2つのことば</h2><button class="btn primary small" id="translateBtn">翻訳を作る</button></header>
         <div id="trBody" class="tr-grid"></div>
-        <p class="note" id="trNote"></p>
+        <details class="more"><summary>翻訳の設定（言語・翻訳元）</summary>
+          <div class="row" style="align-items:flex-start;margin-top:8px">
+            <label style="flex:1">言語1<select id="lang0"></select></label>
+            <label style="flex:1">言語2<select id="lang1"></select></label>
+          </div>
+          <p class="hint" style="margin-top:8px">翻訳元</p>
+          <div class="seg" id="sourceSeg">
+            <button data-source="easy">やさしい日本語</button>
+            <button data-source="original">先生のことば（原文）</button>
+          </div>
+          <p class="note" id="trNote"></p>
+        </details>
       </div>
 
-      <div class="card" id="cardConfirm">
-        <header><h2><span class="step">6</span>先生の確認</h2><span id="confirmBadge"></span></header>
+      <div class="card confirm-card" id="cardConfirm">
+        <header><h2>✅ 先生のOK</h2><span id="confirmBadge"></span></header>
         <div id="confirmBody"></div>
       </div>
     </section>
 
-    <section class="col-display">
-      <div class="card" id="cardDisplay">
-        <h2><span class="step">7</span>児童向けの画面</h2>
-        <div id="conn"></div>
-        <div class="row" style="margin-top:8px">
-          <button class="btn primary" id="openStudent">児童向けの画面を開く</button>
-          <button class="btn small" id="screenPerm">拡張ディスプレイを使う</button>
+    <section class="panel" data-panel="3">
+      <div class="panel-head"><h1><span class="pnum">3</span>子どもに見せる</h1><p>先生がOKした内容を、教室の大きな画面に出します。</p></div>
+      <div class="show-grid">
+        <div class="card" id="cardDisplay">
+          <div id="conn"></div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn primary" id="openStudent">児童向けの画面を開く</button>
+            <button class="btn small" id="screenPerm">拡張ディスプレイを使う</button>
+          </div>
+          <p class="hint" id="openMsg"></p>
+          <div class="row" style="margin:12px 0">
+            <button class="btn ok big" id="showBtn" style="flex:1">📺 子どもの画面に表示する</button>
+          </div>
+          <div class="row">
+            <button class="btn" id="reshowBtn">表示し直す</button>
+            <button class="btn danger" id="clearBtn">表示を中止</button>
+            <button class="btn" id="savePhrase">⭐ 定型文に保存</button>
+          </div>
+          <p class="hint" id="showMsg"></p>
+          <p class="hint" style="margin-bottom:6px">いま子どもの画面に出ている内容</p>
+          <div class="preview" id="preview"></div>
         </div>
-        <p class="hint" id="openMsg"></p>
-        <div class="toggles" id="toggles"></div>
-        <label class="hint">文字の大きさ <b id="scaleLabel"></b>
-          <input type="range" id="scale" min="0.6" max="1.6" step="0.1" style="width:100%">
-        </label>
-        <div class="row" style="margin:8px 0">
-          <button class="btn ok big" id="showBtn" style="flex:1">児童向けの画面に表示</button>
+        <div class="card">
+          <h2>表示のしかた</h2>
+          <div class="toggles" id="toggles"></div>
+          <label class="hint">文字の大きさ <b id="scaleLabel"></b>
+            <input type="range" id="scale" min="0.6" max="1.6" step="0.1" style="width:100%">
+          </label>
         </div>
-        <div class="row">
-          <button class="btn" id="reshowBtn">表示し直す</button>
-          <button class="btn danger" id="clearBtn">表示を中止</button>
-          <button class="btn" id="savePhrase">定型文に保存</button>
-        </div>
-        <p class="hint" id="showMsg"></p>
-        <p class="hint" style="margin-bottom:4px">児童向けの画面に今出ている内容</p>
-        <div class="preview" id="preview"></div>
       </div>
     </section>
   </div>`;
@@ -425,19 +397,19 @@ export function renderLesson(el: HTMLElement) {
     $(el, "#confirmBody").innerHTML = `
       ${
         ok
-          ? `<div class="checked-all">✔ 確認済みです。児童向けの画面に表示できます</div>`
+          ? `<div class="checked-all">先生のOKずみです。子どもの画面に表示できます</div><button class="btn ok big block" id="toStep3" style="margin-top:12px">次へ：③ 子どもに見せる →</button>`
           : blockers.length
-            ? `<p class="hint">次のことが残っているため、まだ確認済みにできません。</p><ul class="blockers">${blockers.map((b) => `<li>✖ ${esc(b)}</li>`).join("")}</ul>`
-            : `<p class="hint">内容を確かめて、「確認済みにする」を押してください。</p>`
+            ? `<p class="hint">次のことが残っているため、まだOKにできません。</p><ul class="blockers">${blockers.map((b) => `<li>✖ ${esc(b)}</li>`).join("")}</ul>`
+            : `<p class="hint">内容をたしかめて、下の「たしかめました（OK）」を押してください。</p>`
       }
-      <button class="btn primary big block" id="confirmBtn" ${ok || blockers.length ? "disabled" : ""}>確認済みにする</button>
-      <table class="timings" aria-label="各段階にかかった時間">
+      ${ok ? "" : `<button class="btn primary big block" id="confirmBtn" ${blockers.length ? "disabled" : ""}>✅ たしかめました（OK）</button>`}
+      <details class="more"><summary>⏱ かかった時間（授業の流れを止めないか）</summary><table class="timings" aria-label="各段階にかかった時間">
         <tr><td>音声認識（録音を止めてから文字になるまで）</td><td>${ms(t.speech)}</td></tr>
         <tr><td>やさしい日本語化</td><td>${ms(t.easy)}</td></tr>
         <tr><td>照合</td><td>${ms(t.check)}</td></tr>
         <tr><td>翻訳（2言語）</td><td>${ms(t.translate)}</td></tr>
-        <tr><td>先生の確認（変換ができてから、確認済みにするまで）</td><td>${ms(t.review)}</td></tr>
-      </table>
+        <tr><td>先生の確認（変換ができてから、OKを押すまで）</td><td>${ms(t.review)}</td></tr>
+      </table></details>
       ${
         state.ackLog.length
           ? `<p class="hint" style="margin:8px 0 0">内容を確認して進めた警告（記録はこのブラウザの中だけ）</p><ul class="ack-log">${state.ackLog
@@ -446,6 +418,8 @@ export function renderLesson(el: HTMLElement) {
               .join("")}</ul>`
           : ""
       }`;
+    const next = el.querySelector<HTMLButtonElement>("#toStep3");
+    if (next) next.onclick = () => showStep(3);
     const btn = el.querySelector<HTMLButtonElement>("#confirmBtn");
     if (btn)
       btn.onclick = () => {
@@ -495,7 +469,9 @@ export function renderLesson(el: HTMLElement) {
     $<HTMLButtonElement>(el, "#clearBtn").disabled = !state.shown;
     $(el, "#showMsg").innerHTML = ok
       ? ""
-      : `<span>🔒 先生が確認済みにするまで、児童向けの画面には表示できません。</span>`;
+      : `<span>🔒 ②で先生がOKするまで、子どもの画面には表示できません。<a href="#" id="backTo2">②にもどる</a></span>`;
+    const back = el.querySelector<HTMLAnchorElement>("#backTo2");
+    if (back) back.onclick = (e) => (e.preventDefault(), showStep(2));
     renderPreviewAndSteps();
   };
 
@@ -640,6 +616,7 @@ export function renderLesson(el: HTMLElement) {
     renderAfterTexts();
     renderInput();
     notify();
+    showStep(2);
     await translateAll();
   };
 
@@ -670,6 +647,7 @@ export function renderLesson(el: HTMLElement) {
     renderVariant();
     renderAfterTexts();
     notify();
+    showStep(2);
     await translateAll();
   };
 
@@ -693,6 +671,7 @@ export function renderLesson(el: HTMLElement) {
     renderVariant();
     renderAfterTexts();
     notify();
+    showStep(3);
   };
 
   let translating = false;
@@ -837,62 +816,35 @@ export function renderLesson(el: HTMLElement) {
     };
   }
 
-  // ------------------------------------------------------------------ ようこその帯
-  const hero = $(el, "#hero");
-  $(el, "#heroToggle").onclick = () => {
-    heroMin = !heroMin;
-    hero.classList.toggle("min", heroMin);
-    $(el, "#heroToggle").textContent = heroMin ? "説明をひらく" : "説明をとじる";
-    try {
-      localStorage.setItem("yasashii-demo.heroMin", heroMin ? "1" : "0");
-    } catch {
-      // 保存できない環境では、この画面の間だけ
-    }
+  // ------------------------------------------------------------------ 3つのステップ（1つずつ見せる）
+  const showStep = (n: number, scroll = true) => {
+    wizStep = n;
+    $$(el, "[data-panel]").forEach((p) => (p.hidden = Number(p.dataset.panel) !== n));
+    renderStepper();
+    if (scroll) window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  const goTo = (id: string) => $(el, `#${id}`).scrollIntoView({ behavior: "smooth", block: "start" });
-  $(el, "#heroSample").onclick = () => {
-    inputTab = "sample";
-    renderInput();
-    loadSample(SAMPLES[0]);
-    goTo("cardEasy");
-  };
-  $(el, "#heroMic").onclick = () => {
-    inputTab = "mic";
-    renderInput();
-    goTo("cardInput");
-  };
-  $(el, "#heroStudent").onclick = async () => {
-    $(el, "#openMsg").textContent = await openStudentWindow();
-  };
-
-  // ------------------------------------------------------------------ 進み具合（6つの段階）
   const renderStepper = () => {
     const s = state.session;
-    const open = unacknowledged(s).length;
-    const stale = s.langs.some((l) => isStale(s, l));
     const ok = canDisplay(s);
+    const open = unacknowledged(s).length;
     const steps = [
-      { icon: "🎤", label: "指示を入れる", sub: "見本・マイク・文字", done: !!s.original, blocked: false, target: "cardInput" },
-      { icon: "✏️", label: "やさしくする", sub: "やさしい日本語", done: !!s.easy, blocked: false, target: "cardEasy" },
-      { icon: "🔍", label: "チェック", sub: open ? `警告 ${open}件` : "意味の取りこぼし", done: !!s.easy && open === 0, blocked: open > 0, target: "checkCard" },
-      { icon: "🌏", label: "ほんやく", sub: s.easy && stale ? "作り直しが必要" : "2つのことば", done: !!s.easy && !stale, blocked: !!s.easy && stale, target: "cardTr" },
-      { icon: "✅", label: "先生のかくにん", sub: ok ? "確認済み" : "まだ", done: ok, blocked: false, target: "cardConfirm" },
-      { icon: "📺", label: "子どもの画面へ", sub: state.shown ? "表示中" : "まだ", done: !!state.shown && ok, blocked: false, target: "cardDisplay" },
+      { icon: "🎤", label: "話す・えらぶ", sub: s.original ? "入りました" : "指示を入れる", done: !!s.original },
+      { icon: "🔍", label: "たしかめる", sub: ok ? "OKずみ" : open ? `⚠ ${open}件` : s.easy ? "先生のOKを待っています" : "—", done: ok },
+      { icon: "📺", label: "子どもに見せる", sub: state.shown ? "表示中" : ok ? "表示できます" : "OKのあとで", done: !!state.shown && ok },
     ];
-    const current = steps.findIndex((x) => !x.done);
     $(el, "#stepper").innerHTML = steps
       .map(
-        (x, i) => `<button type="button" data-goto="${x.target}" class="${x.done ? "done" : ""} ${i === current ? "current" : ""} ${x.blocked ? "blocked" : ""}" aria-current="${i === current ? "step" : "false"}">
-          <span class="dot" aria-hidden="true">${x.done ? "✔" : x.blocked ? "⚠" : x.icon}</span>
-          <span>${i + 1}. ${esc(x.label)}</span>
-          <small>${esc(x.sub)}</small>
+        (x, i) => `<button type="button" data-step="${i + 1}" class="${x.done ? "done" : ""} ${wizStep === i + 1 ? "current" : ""}" aria-current="${wizStep === i + 1 ? "step" : "false"}">
+          <span class="dot" aria-hidden="true">${x.done ? "✔" : x.icon}</span>
+          <span class="w-text"><b>${i + 1}. ${esc(x.label)}</b><small>${esc(x.sub)}</small></span>
         </button>`,
       )
       .join("");
-    $$(el, "[data-goto]").forEach((b) => (b.onclick = () => goTo(b.dataset.goto!)));
+    $$(el, "[data-step]").forEach((b) => (b.onclick = () => showStep(Number(b.dataset.step))));
   };
 
   // ------------------------------------------------------------------ はじめの表示
+  showStep(wizStep, false);
   renderInput();
   renderSource();
   syncTextareas();

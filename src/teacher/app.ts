@@ -8,6 +8,7 @@ import { loadGlossary, loadSettings, saveSettings, type Settings } from "../glos
 import type { GlossaryTerm, Sample } from "../types";
 import { logoSvg } from "../ui/art";
 import { $, esc } from "../ui/dom";
+import { renderHome } from "./home";
 import { renderLesson } from "./lesson";
 import { renderDataPage, renderGlossaryPage, renderPartsPage, renderPhrasesPage, renderResultsPage } from "./pages";
 import { newSession, type Session } from "./session";
@@ -140,31 +141,33 @@ export async function openStudentWindow(): Promise<string> {
 }
 
 // ------------------------------------------------------------------ ページの切り替え
-const PAGES: { hash: string; label: string; icon: string; render: (el: HTMLElement) => void | (() => void) }[] = [
-  { hash: "#/", label: "授業（教師用）", icon: "🏫", render: renderLesson },
-  { hash: "#/glossary", label: "教科の用語集", icon: "📘", render: renderGlossaryPage },
-  { hash: "#/phrases", label: "定型文", icon: "⭐", render: renderPhrasesPage },
-  { hash: "#/results", label: "検証結果", icon: "📊", render: renderResultsPage },
-  { hash: "#/parts", label: "本番での差し替えの考え方", icon: "🔧", render: renderPartsPage },
-  { hash: "#/data", label: "データの扱い", icon: "🔒", render: renderDataPage },
+const PAGES: { hash: string; label: string; icon: string; nav: boolean; render: (el: HTMLElement) => void | (() => void) }[] = [
+  { hash: "#/", label: "ホーム", icon: "🏠", nav: true, render: renderHome },
+  { hash: "#/use", label: "使ってみる", icon: "▶", nav: true, render: renderLesson },
+  { hash: "#/glossary", label: "用語集", icon: "📘", nav: true, render: renderGlossaryPage },
+  { hash: "#/phrases", label: "定型文", icon: "⭐", nav: true, render: renderPhrasesPage },
+  { hash: "#/results", label: "検証結果", icon: "📊", nav: true, render: renderResultsPage },
+  { hash: "#/parts", label: "本番での差し替えの考え方", icon: "🔧", nav: false, render: renderPartsPage },
+  { hash: "#/data", label: "データの扱い", icon: "🔒", nav: false, render: renderDataPage },
 ];
 
 export function mountApp(root: HTMLElement) {
   root.innerHTML = `
     <header class="topbar">
       <a class="brand" href="#/">${logoSvg}<span><b>やさしい日本語＋多言語 教室表示</b><small>デモ版（APIキー不使用・ブラウザだけで動作）</small></span></a>
-      <nav class="nav" aria-label="ページ">${PAGES.map((p) => `<a href="${p.hash}"><span class="ico" aria-hidden="true">${p.icon}</span>${esc(p.label)}</a>`).join("")}</nav>
+      <nav class="nav" aria-label="ページ">${PAGES.filter((p) => p.nav).map((p) => `<a href="${p.hash}"><span class="ico" aria-hidden="true">${p.icon}</span>${esc(p.label)}</a>`).join("")}</nav>
       <span class="spacer"></span>
+      <div class="parts" id="parts" aria-label="今使っている部品"></div>
       <span class="demo-flag" title="このデモは生成AIを使っていません"><span class="full">デモ：生成AIは使っていません</span><span class="short">生成AI不使用</span></span>
     </header>
-    <main id="page"></main>
-    <aside class="parts" id="parts" aria-label="今使っている部品"></aside>`;
+    <main id="page"></main>`;
   const page = $(root, "#page");
   let cleanup: (() => void) | void;
 
   const route = () => {
     const current = PAGES.find((p) => p.hash === (location.hash || "#/")) ?? PAGES[0];
     root.querySelectorAll(".nav a").forEach((a) => a.setAttribute("aria-current", a.getAttribute("href") === current.hash ? "page" : "false"));
+    document.body.dataset.page = current.hash.slice(2) || "home";
     if (typeof cleanup === "function") cleanup();
     page.innerHTML = "";
     cleanup = current.render(page);
